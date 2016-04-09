@@ -7,9 +7,11 @@ GroupRecyclerView extends SimpleRecyclerView,在此基础上实现了条目分�
 [download apk][1]
   扫描二维码安装:
   ![扫描二维码安装][2]
+  ![][3]
 
 
   [1]: https://github.com/JaySong/PerfectRecyclerView/blob/master/simple-debug.apk
   [2]: https://github.com/JaySong/PerfectRecyclerView/blob/master/qr.png
+  [3]: https://github.com/JaySong/PerfectRecyclerView/blob/master/device-2016-04-10-005725.png
 
 
