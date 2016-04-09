@@ -4,7 +4,12 @@ EasyRecyclerView extends SimpleRecyclerView,在此基础上实现了条目点击
 GroupRecyclerView extends SimpleRecyclerView,在此基础上实现了条目分组
 
 # Demo
-download apk
----
+[download apk][1]
+  扫描二维码安装:
+  ![扫描二维码安装][2]
+
+
+  [1]: https://github.com/JaySong/PerfectRecyclerView/blob/master/simple-debug.apk
+  [2]: https://github.com/JaySong/PerfectRecyclerView/blob/master/qr.png
 
 
