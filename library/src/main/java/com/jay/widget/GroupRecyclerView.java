@@ -47,7 +47,7 @@ public class GroupRecyclerView extends SimpleRecyclerView implements RecyclerVie
     @Override
     public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
         View childView = rv.findChildViewUnder(e.getX(), e.getY());
-        if (childView != null &&  mGestureDetector.onTouchEvent(e)) {
+        if (childView != null && mGestureDetector.onTouchEvent(e)) {
 
             int childLayoutPosition = getChildLayoutPosition(childView);
             GroupAdapter adapter = (GroupAdapter) getAdapter();
@@ -55,13 +55,13 @@ public class GroupRecyclerView extends SimpleRecyclerView implements RecyclerVie
             boolean isGroup = adapter.isGroup(childLayoutPosition);
             if (isGroup) {
                 if (mOnGroupItemClickListener != null) {
-                    mOnGroupItemClickListener.onGroupItemClick(this,adapter,childView,adapter.getGroupPosition(childLayoutPosition));
+                    mOnGroupItemClickListener.onGroupItemClick(this, adapter, childView, adapter.getGroupPosition(childLayoutPosition));
                 }
-            }else{
+            } else {
                 if (mOnChildItemClickListener != null) {
                     int groupPosition = adapter.getGroupPosition(childLayoutPosition);
                     int childPosition = adapter.getChildPosition(childLayoutPosition);
-                    mOnChildItemClickListener.onChildItemClick(this,adapter,childView,groupPosition,childPosition);
+                    mOnChildItemClickListener.onChildItemClick(this, adapter, childView, groupPosition, childPosition);
                 }
             }
             return true;
@@ -72,6 +72,7 @@ public class GroupRecyclerView extends SimpleRecyclerView implements RecyclerVie
     public void setOnGroupItemClickListener(OnGroupItemClickListener listener) {
         mOnGroupItemClickListener = listener;
     }
+
     public void setOnChildItemClickListener(OnChildItemClickListener listener) {
         mOnChildItemClickListener = listener;
     }
@@ -104,13 +105,13 @@ public class GroupRecyclerView extends SimpleRecyclerView implements RecyclerVie
                 if (isGroup) {
                     if (mOnGroupItemLongClickListener != null) {
                         int groupPosition = adapter.getGroupPosition(childLayoutPosition);
-                        mOnGroupItemLongClickListener.onGroupItemLongClick(GroupRecyclerView.this,adapter,childView,groupPosition);
+                        mOnGroupItemLongClickListener.onGroupItemLongClick(GroupRecyclerView.this, adapter, childView, groupPosition);
                     }
-                }else{
+                } else {
                     if (mOnChildItemLongClickListener != null) {
                         int groupPosition = adapter.getGroupPosition(childLayoutPosition);
                         int childPosition = adapter.getChildPosition(childLayoutPosition);
-                        mOnChildItemLongClickListener.onChildItemLongClick(GroupRecyclerView.this,adapter,childView,groupPosition,childPosition);
+                        mOnChildItemLongClickListener.onChildItemLongClick(GroupRecyclerView.this, adapter, childView, groupPosition, childPosition);
                     }
                 }
             }
@@ -120,6 +121,7 @@ public class GroupRecyclerView extends SimpleRecyclerView implements RecyclerVie
     public void setOnGroupItemLongClickListener(OnGroupItemLongClickListener l) {
         mOnGroupItemLongClickListener = l;
     }
+
     public void setOnChildItemLongClickListener(OnChildItemLongClickListener l) {
         mOnChildItemLongClickListener = l;
     }
@@ -146,12 +148,12 @@ public class GroupRecyclerView extends SimpleRecyclerView implements RecyclerVie
         @Override
         public final EasyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if (GROUP_ITEM == viewType) {
-                return onCreateEasyViewHolder(parent, viewType);
+                return onCreateGroupViewHolder(parent, viewType);
             }
             return onCreateChildViewHolder(parent, viewType);
         }
 
-        public abstract EasyViewHolder onCreateEasyViewHolder(ViewGroup parent, int viewType);
+        public abstract EasyViewHolder onCreateGroupViewHolder(ViewGroup parent, int viewType);
 
         public abstract EasyViewHolder onCreateChildViewHolder(ViewGroup parent, int viewType);
 
@@ -159,15 +161,16 @@ public class GroupRecyclerView extends SimpleRecyclerView implements RecyclerVie
         public final void onBindViewHolder(EasyViewHolder holder, int position) {
             int viewType = getItemViewType(position);
             if (GROUP_ITEM == viewType) {
-                onBindEasyViewHolder(holder, getGroupPosition(position));
+                onBindGroupViewHolder(holder, getGroupPosition(position));
             } else {
-                onBindChildViewHolder(holder, getGroupPosition(position),getChildPosition(position) );
+                onBindChildViewHolder(holder, getGroupPosition(position), getChildPosition(position));
             }
         }
 
         public int getGroupPosition(int position) {
             return mGroupIndex.indexOfKey(getGroupIndex(position));
         }
+
         public int getGroupIndex(int position) {
             if (isGroup(position)) {
                 tempGroupPosition = position;
@@ -188,7 +191,7 @@ public class GroupRecyclerView extends SimpleRecyclerView implements RecyclerVie
             return position - getGroupIndex(position) - 1;
         }
 
-        public abstract void onBindEasyViewHolder(EasyViewHolder holder, int groupPosition);
+        public abstract void onBindGroupViewHolder(EasyViewHolder holder, int groupPosition);
 
         public abstract void onBindChildViewHolder(EasyViewHolder holder, int groupPosition, int childPosition);
 
@@ -214,21 +217,6 @@ public class GroupRecyclerView extends SimpleRecyclerView implements RecyclerVie
         public boolean isGroup(int position) {
             return mGroupIndex.get(position) != null;
         }
-
-        @Override
-        public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-            LayoutManager layoutManager = recyclerView.getLayoutManager();
-            if (layoutManager instanceof GridLayoutManager) {
-                final GridLayoutManager glm = (GridLayoutManager) layoutManager;
-                glm.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                    @Override
-                    public int getSpanSize(int position) {
-                        return isGroup(position) ? glm.getSpanCount() : 1;
-                    }
-                });
-            }
-        }
-
         @Override
         public void onViewAttachedToWindow(EasyViewHolder holder) {
             super.onViewAttachedToWindow(holder);
@@ -245,6 +233,20 @@ public class GroupRecyclerView extends SimpleRecyclerView implements RecyclerVie
         public abstract int getChildrenCount(int groupPosition);
     }
 
+    @Override
+    public void setLayoutManager(LayoutManager layout) {
+        super.setLayoutManager(layout);
+        if (layout instanceof GridLayoutManager) {
+            final GridLayoutManager glm = (GridLayoutManager) layout;
+            final GroupAdapter adapter = (GroupAdapter) getAdapter();
+            glm.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    return adapter.isGroup(position) ? glm.getSpanCount() : 1;
+                }
+            });
+        }
+    }
 
     /**
      * 条目点击事件监听
@@ -253,13 +255,14 @@ public class GroupRecyclerView extends SimpleRecyclerView implements RecyclerVie
         /**
          * 当条目被点击时回调
          *
-         * @param rv       {@link GroupRecyclerView}
-         * @param adapter  {@link RecyclerView.Adapter}
-         * @param view     受理触摸点击事件的View
+         * @param rv            {@link GroupRecyclerView}
+         * @param adapter       {@link RecyclerView.Adapter}
+         * @param view          受理触摸点击事件的View
          * @param groupPosition 点击条目的位置
          */
         void onGroupItemClick(GroupRecyclerView rv, GroupRecyclerView.GroupAdapter adapter, View view, int groupPosition);
     }
+
     /**
      * 条目点击事件监听
      */
@@ -267,9 +270,9 @@ public class GroupRecyclerView extends SimpleRecyclerView implements RecyclerVie
         /**
          * 当条目被点击时回调
          *
-         * @param rv       {@link GroupRecyclerView}
-         * @param adapter  {@link RecyclerView.Adapter}
-         * @param view     受理触摸点击事件的View
+         * @param rv            {@link GroupRecyclerView}
+         * @param adapter       {@link RecyclerView.Adapter}
+         * @param view          受理触摸点击事件的View
          * @param groupPosition 点击条目的位置
          */
         void onChildItemClick(GroupRecyclerView rv, GroupRecyclerView.GroupAdapter adapter, View view, int groupPosition, int childPosition);
@@ -282,14 +285,15 @@ public class GroupRecyclerView extends SimpleRecyclerView implements RecyclerVie
         /**
          * 当条目被长按点击时回调
          *
-         * @param rv       {@link EasyRecyclerView}
-         * @param adapter  {@link android.support.v7.widget.RecyclerView.Adapter}
-         * @param view     受理触摸点击事件的View
+         * @param rv            {@link EasyRecyclerView}
+         * @param adapter       {@link android.support.v7.widget.RecyclerView.Adapter}
+         * @param view          受理触摸点击事件的View
          * @param groupPosition 点击组条目的位置
          * @param childPosition 点击某一组子条目的位置
          */
-        void onChildItemLongClick(GroupRecyclerView rv, GroupRecyclerView.GroupAdapter adapter, View view, int groupPosition,int childPosition);
+        void onChildItemLongClick(GroupRecyclerView rv, GroupRecyclerView.GroupAdapter adapter, View view, int groupPosition, int childPosition);
     }
+
     /**
      * 组条目长按事件监听
      */
@@ -297,9 +301,9 @@ public class GroupRecyclerView extends SimpleRecyclerView implements RecyclerVie
         /**
          * 当条目被长按点击时回调
          *
-         * @param rv       {@link EasyRecyclerView}
-         * @param adapter  {@link android.support.v7.widget.RecyclerView.Adapter}
-         * @param view     受理触摸点击事件的View
+         * @param rv            {@link EasyRecyclerView}
+         * @param adapter       {@link android.support.v7.widget.RecyclerView.Adapter}
+         * @param view          受理触摸点击事件的View
          * @param groupPosition 点击条目的位置
          */
         void onGroupItemLongClick(GroupRecyclerView rv, GroupRecyclerView.GroupAdapter adapter, View view, int groupPosition);
