@@ -7,12 +7,17 @@
     tools:context="com.jay.app.MainActivity">
 
     <Button
-        android:id="@+id/btn"
+        android:id="@+id/btnEasy"
+        android:text="EasyRecyclerView"
+        android:textAllCaps="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.jay.widget.GroupRecyclerView
-        android:id="@+id/grv"
+    <Button
+        android:id="@+id/btnGroup"
+        android:text="GroupRecyclerView"
+        android:textAllCaps="false"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

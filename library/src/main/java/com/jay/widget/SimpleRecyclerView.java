@@ -15,7 +15,7 @@ import android.view.View;
  * @author Q.Jay
  * @version 1.0.0
  */
-class SimpleRecyclerView extends RecyclerView {
+public class SimpleRecyclerView extends RecyclerView {
     private View emptyView;
     private OnLoadingListener mOnLoadingListener;
     private boolean isLoading;
