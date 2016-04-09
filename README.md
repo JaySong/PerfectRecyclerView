@@ -3,5 +3,8 @@
 EasyRecyclerView extends SimpleRecyclerView,在此基础上实现了条目点击事件与长按事件,实现了添加HeaderView与FooterView;
 GroupRecyclerView extends SimpleRecyclerView,在此基础上实现了条目分组
 
-# Gif
+# Demo
+download apk
 ---
+
+
