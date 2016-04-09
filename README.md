@@ -12,6 +12,6 @@ GroupRecyclerView extends SimpleRecyclerView,在此基础上实现了条目分�
 
   [1]: https://github.com/JaySong/PerfectRecyclerView/blob/master/simple-debug.apk
   [2]: https://github.com/JaySong/PerfectRecyclerView/blob/master/qr.png
-  [3]: https://github.com/JaySong/PerfectRecyclerView/blob/master/device-2016-04-10-005725.png
+  [3]: https://github.com/JaySong/PerfectRecyclerView/blob/master/device-2016-04-10-005725.png = 100
 
 
