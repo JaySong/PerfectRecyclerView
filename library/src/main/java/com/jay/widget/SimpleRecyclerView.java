@@ -38,7 +38,6 @@ public class SimpleRecyclerView extends RecyclerView {
     }
 
 
-
     public void setEmptyView(View view) {
         if (view == null) {
             throw new NullPointerException("view is null");
